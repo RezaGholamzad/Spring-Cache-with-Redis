@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /*
     Controllers are the place where Redis cache is called for action.
     Actually, this is the best place to do so because as a cache is directly associated with it.
@@ -39,17 +41,33 @@ public class UserController {
                 .orElseThrow(()->new Exception("not found user"));
     }
 
+//    cache list of user
+    @Cacheable(value = "users")
+    @GetMapping("/all")
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
+
+//    update entry in cache
     @CachePut(value = "users", key = "#user.id")
     @PutMapping("/update")
     public User updateUser(@RequestBody User user){
         return userRepository.save(user);
     }
 
-    @CacheEvict(value = "users", key = "#id") // allEntries = true -> all deleted
+//    Remove entry from cache
+    @CacheEvict(value = "users", key = "#id")
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id){
         LOGGER.info("deleting person with id {}", id);
         userRepository.deleteById(id);
+    }
+
+//    Remove all entry from cache
+    @CacheEvict(value = "users", allEntries = true)
+    @GetMapping("/evict")
+    public void evictUsers(){
+        LOGGER.info("evict all users of cache");
     }
 
 }
