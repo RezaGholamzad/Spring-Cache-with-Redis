@@ -1,12 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.1.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
+    id 'org.springframework.boot' version '3.0.6'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.journaldev'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {

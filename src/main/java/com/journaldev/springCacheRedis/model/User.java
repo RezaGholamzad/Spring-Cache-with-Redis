@@ -1,19 +1,20 @@
 package com.journaldev.springCacheRedis.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.redis.core.RedisHash;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Entity
+@Entity(name = "user1")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 7156526077883281623L;
@@ -29,4 +30,16 @@ public class User implements Serializable {
         this.followers = followers;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
